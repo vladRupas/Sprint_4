@@ -8,10 +8,6 @@ import org.openqa.selenium.WebElement;
 public class OrderPage {
 
     private final WebDriver driver;
-    // Кнопка "Заказать" наверху страницы
-    protected By topOrderButton = By.className("Button_Button__ra12g");
-    // Кнопка "Заказать" в середине страницы
-    protected By middleOrderButton = By.cssSelector(".Button_Button__ra12g.Button_Middle__1CSJM");
     // Поле "Имя"
     private final By firstNameInput = By.cssSelector("input[placeholder = '* Имя']");
     // Поле "Фамилия"
@@ -22,8 +18,6 @@ public class OrderPage {
     private final By metroStationInput = By.cssSelector("input[placeholder = '* Станция метро']");
     // Поле "Телефон"
     private final By phoneNumberInput = By.cssSelector("input[placeholder = '* Телефон: на него позвонит курьер']");
-    // Кнопка "Далее"
-    protected By nextButton = By.cssSelector(".Button_Button__ra12g.Button_Middle__1CSJM");
     // Поле "Когда привезти самокат"
     private final By startDateInput = By.cssSelector("input[placeholder = '* Когда привезти самокат']");
     // Дата из календаря
@@ -36,6 +30,12 @@ public class OrderPage {
     // Поле "сутки" в выпадающем листе
     private final By setDurationTime = By.xpath
             ("//div[(@class = 'Dropdown-option') and (text() = 'сутки')]");
+    // Кнопка "Заказать" наверху страницы
+    protected By topOrderButton = By.className("Button_Button__ra12g");
+    // Кнопка "Заказать" в середине страницы
+    protected By middleOrderButton = By.cssSelector(".Button_Button__ra12g.Button_Middle__1CSJM");
+    // Кнопка "Далее"
+    protected By nextButton = By.cssSelector(".Button_Button__ra12g.Button_Middle__1CSJM");
     // Кнопка "Заказать"
     protected By makeOrderButton = By.xpath
             ("//button[(@class = 'Button_Button__ra12g Button_Middle__1CSJM') and " +
@@ -49,22 +49,32 @@ public class OrderPage {
     protected By checkStatusButton = By.xpath("//div[@class = 'Order_Modal__YZ-d3']" +
             "//button[@class = 'Button_Button__ra12g Button_Middle__1CSJM']");
 
-    public OrderPage (WebDriver driver) {
+    public OrderPage(WebDriver driver) {
         this.driver = driver;
+    }
+
+    // Метод закрывает нижний баннер (принимает cookies)
+    public void acceptCookies() {
+        driver.findElement(By.className("App_CookieButton__3cvqF")).click();
     }
 
     // Метод кликает на кнопку "Заказать" наверху страницы
     public void clickTopOrderButton() {
-        WebElement element = driver.findElement(topOrderButton);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element);
         driver.findElement(topOrderButton).click();
     }
 
-    // Метод кликает на кнопку "Заказать" в середине страницы
+    // Метод находит и кликает на кнопку "Заказать" в середине страницы
     public void clickMiddleOrderButton() {
         WebElement element = driver.findElement(middleOrderButton);
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element);
         driver.findElement(middleOrderButton).click();
+    }
+
+    // Метод проверяет обе кнопки "Заказать"
+    public void checkOrderButtons() {
+        clickTopOrderButton();
+        driver.navigate().back();
+        clickMiddleOrderButton();
     }
 
     // Метод заполняет форму заказа
